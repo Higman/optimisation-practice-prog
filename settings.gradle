@@ -1,0 +1,4 @@
+rootProject.name = 'optimisation-practice-prog'
+include 'ga-practice-prog'
+include 'practice-prog-core'
+
