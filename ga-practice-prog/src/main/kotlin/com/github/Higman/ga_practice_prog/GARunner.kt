@@ -34,7 +34,7 @@ class GARunner(
         CrossingProcessor(
             RoulettePicker(2, randSeed),
             TwoPointCrossingUnit(gLen, randSeed),
-            SimpleMutator(0.0001, gLen, randSeed),
+            SimpleMutator(0.005, gLen, randSeed),
             SimpleGeneSifter(initValues.size),
             10
         )

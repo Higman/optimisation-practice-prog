@@ -22,20 +22,19 @@ class RoulettePicker(pickedOutParentsSize: Int, randSeed: Long = System.currentT
         var fitnessValueTotal = calcFitnessValueTotal(choices)
         val pickedOutParents = mutableListOf<GAIndividual>()
         repeat(pickedOutParentsSize) {
-            val randForSelection = rand.nextDouble()
-            var tempRandForSelection = fitnessValueTotal * randForSelection
+            var tempRandForSelection = fitnessValueTotal * rand.nextDouble()
             val selectedIndex = targetChoicesIndex.indexOfFirst {
                 if (tempRandForSelection < choices[it].fitnessValue) return@indexOfFirst true
                 tempRandForSelection -= choices[it].fitnessValue
                 false
             }
-            val idx = if (selectedIndex >= 0) {
-                targetChoicesIndex.removeAt(selectedIndex)
-            } else {  // ルーレット選択で定まらなかった場合、先頭要素を選択
-                targetChoicesIndex.removeAt(0)
-            }
+            val idx = targetChoicesIndex.removeAt(
+                if (selectedIndex >= 0) {
+                    selectedIndex
+                } else 0  // ルーレット選択で定まらなかった場合、先頭要素を選択
+            )
             pickedOutParents.add(choices[idx])
-            fitnessValueTotal -= randForSelection
+            fitnessValueTotal -= choices[idx].fitnessValue
         }
         return pickedOutParents
     }

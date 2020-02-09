@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.pow
 
 internal class RoulettePickerTest {
@@ -33,8 +34,9 @@ internal class RoulettePickerTest {
                 choices.minFitnessFunc()
             ))
         }
+        choices.sortBy { abs(it.solutionValue()) }
 
-        val res = aa.pickedOutParents(choices)
+        val res = aa.pickedOutParents(choices).sortedBy { abs(it.solutionValue()) }
         println(choices)
         println(res)
         Assertions.assertEquals(2, res.size)
