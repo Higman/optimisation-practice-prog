@@ -14,12 +14,12 @@ val Functions = listOf(
             .sumByDouble { 100 * (it.first - it.second.pow(2)).pow(2) + (it.second - 1).pow(2) }
     }
 )
-private val GeneLengthInitValue = 2
+private val GeneLengthInitValue = 4
 
-val FuncDegrees = listOf(2, 4, 8, 16, 32, 64, 128)
+val FuncDegrees = listOf(64)
 val Range = Pair(-2.0, 2.0)
 
-private const val IndividualSize = 30
+private val IndividualSize = 30
 
 // 初期値行列変数
 val initVecMap: HashMap<DegreeAndGeneLength, List<VecData<FloatGrayCode>>> =
@@ -28,7 +28,6 @@ val initVecMap: HashMap<DegreeAndGeneLength, List<VecData<FloatGrayCode>>> =
             val data = super.get(key)
             return data
                 ?: run {
-                    println(key)
                     val n = List(IndividualSize) {
                         VecData(List(key.d) {
                             createRandomFloatGrayCode(key.gl, Range)
@@ -73,7 +72,7 @@ private fun gaRun(
         val param = DegreeAndGeneLength(d, geneLength)
         val init = requireNotNull(initVecMap[param])
         val seed = requireNotNull(seedMap[param])
-        val gr = GARunner(FunctionData(d, f.second), init, 0.0, 1000, seed)
+        val gr = GARunner(FunctionData(d, f.second), init, 0.0, 1000)
         gr.run()
         val r = gr.result()
         println("${f.first} ${d} ${geneLength}: $r")

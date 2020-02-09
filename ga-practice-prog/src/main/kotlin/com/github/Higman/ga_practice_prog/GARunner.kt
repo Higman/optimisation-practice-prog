@@ -26,6 +26,10 @@ class GARunner(
         }
 
     var rand = Random(randSeed)
+    // 歴代で最良の結果
+    var bestResultIndividualInHistory: GAIndividual? = null
+        private set
+
     private val crossingProcessor: CrossingProcessor = run {
         // 初期値引数から遺伝子長を調べる
         val gLen = if (initValues.any {
@@ -55,14 +59,13 @@ class GARunner(
         run {
             while (time < timeMax) {
                 if (step()) return@run
+                println(time)
             }
             return false
         }
         return true
     }
 
-    // ある時点での最適値差分
-    private var bestResultDiffAtSomePoint = Double.MAX_VALUE
     // 収束した世代
     var convergedTime = 0
         private set
@@ -71,18 +74,17 @@ class GARunner(
         crossingProcessor.updateByCrossing()
         time += 1
         return isReached(correctValue).apply {
-            checkConvergence()
+            updateBestInHistory()
         }
     }
 
-    // 収束の監視
-    private fun checkConvergence() {
-        val br = getBestResultIndividual()
+    // 最良値の更新
+    private fun updateBestInHistory() {
+        val br = getBestResultIndividual()  // 現状の集合の最良値を取得
         // 最適値が更新されたか判定
-        val tempDiff = abs(br.solutionValue() - correctValue)
-        if (bestResultDiffAtSomePoint > tempDiff) {
+        if (br.solutionValue() < (bestResultIndividualInHistory?.solutionValue() ?: Double.MAX_VALUE)) {
             convergedTime = time
-            bestResultDiffAtSomePoint = tempDiff
+            bestResultIndividualInHistory = br.clone()
         }
     }
 
@@ -106,13 +108,14 @@ class GARunner(
     }
 
     override fun result(): AbstractOptimisationResult<FloatGrayCode> {
-        val best = getBestResultIndividual()
-        return GAResult(
-            best.currentXData(),
-            best.solutionValue(),
-            best.solutionValue() - correctValue,
-            convergedTime,
-            time
-        )
+        return requireNotNull(bestResultIndividualInHistory).let {
+            GAResult(
+                it.currentXData(),
+                it.solutionValue(),
+                it.solutionValue() - correctValue,
+                convergedTime,
+                time
+            )
+        }
     }
 }

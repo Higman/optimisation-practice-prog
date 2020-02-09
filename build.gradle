@@ -18,7 +18,7 @@ subprojects {
 
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-        implementation 'com.github.Higman:simple-functiondata-library:0.3.3'
+        implementation 'com.github.Higman:simple-functiondata-library:0.3.5'
         testImplementation 'io.mockk:mockk:1.9.3'
         testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
     }

@@ -76,9 +76,10 @@ class TwoPointCrossingUnit(
             crossedData1.add(FloatGrayCode(bitList1, bitList1.size, range))
             crossedData2.add(FloatGrayCode(bitList2, bitList2.size, range))
         }
+        // まだ所属する集合が決まってないのでfitnessValueFunctionはnull
         return listOf(
-            GAIndividual(func, VecData(crossedData1), firstParent.fitnessValueFunction),
-            GAIndividual(func, VecData(crossedData2), firstParent.fitnessValueFunction)
+            GAIndividual(func, VecData(crossedData1), null),
+            GAIndividual(func, VecData(crossedData2), null)
         )
     }
 
