@@ -18,22 +18,23 @@ class RoulettePicker(pickedOutParentsSize: Int, randSeed: Long = System.currentT
     private var rand: Random = Random(randSeed)
 
     override fun pickedOutProcess(choices: List<GAIndividual>): List<GAIndividual> {
-        val targetChoices = choices.toMutableList()
+        val targetChoicesIndex = choices.indices.toMutableList()
         var fitnessValueTotal = calcFitnessValueTotal(choices)
         val pickedOutParents = mutableListOf<GAIndividual>()
         repeat(pickedOutParentsSize) {
             val randForSelection = rand.nextDouble()
             var tempRandForSelection = fitnessValueTotal * randForSelection
-            val selectedIndex = targetChoices.indexOfFirst {
-                if (tempRandForSelection < it.fitnessValue) return@indexOfFirst true
-                tempRandForSelection -= it.fitnessValue
+            val selectedIndex = targetChoicesIndex.indexOfFirst {
+                if (tempRandForSelection < choices[it].fitnessValue) return@indexOfFirst true
+                tempRandForSelection -= choices[it].fitnessValue
                 false
             }
-            if (selectedIndex >= 0) {
-                pickedOutParents.add(targetChoices.removeAt(selectedIndex))
+            val idx = if (selectedIndex >= 0) {
+                targetChoicesIndex.removeAt(selectedIndex)
             } else {  // ルーレット選択で定まらなかった場合、先頭要素を選択
-                pickedOutParents.add(targetChoices.removeAt(0))
+                targetChoicesIndex.removeAt(0)
             }
+            pickedOutParents.add(choices[idx])
             fitnessValueTotal -= randForSelection
         }
         return pickedOutParents

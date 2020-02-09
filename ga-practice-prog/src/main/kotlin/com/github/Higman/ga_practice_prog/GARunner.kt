@@ -30,13 +30,13 @@ class GARunner(
         // 初期値引数から遺伝子長を調べる
         val gLen = if (initValues.any {
                 it.value.any { it.bitSize == initValues.first().value.first().bitSize }
-            }) initValues.first().value.first().bitSize else throw IllegalArgumentException()
+            }) initValues.first().value.first().bitSize else throw IllegalArgumentException()  // 全ての要素の遺伝子長が同じかチェック
         CrossingProcessor(
             RoulettePicker(2, randSeed),
             TwoPointCrossingUnit(gLen, randSeed),
             SimpleMutator(0.0001, gLen, randSeed),
-            SimpleGeneSifter(30),
-            20
+            SimpleGeneSifter(initValues.size),
+            10
         )
     }
 

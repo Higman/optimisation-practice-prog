@@ -19,6 +19,8 @@ private val GeneLengthInitValue = 2
 val FuncDegrees = listOf(2, 4, 8, 16, 32, 64, 128)
 val Range = Pair(-2.0, 2.0)
 
+private const val IndividualSize = 30
+
 // 初期値行列変数
 val initVecMap: HashMap<DegreeAndGeneLength, List<VecData<FloatGrayCode>>> =
     object : HashMap<DegreeAndGeneLength, List<VecData<FloatGrayCode>>>() {
@@ -27,7 +29,7 @@ val initVecMap: HashMap<DegreeAndGeneLength, List<VecData<FloatGrayCode>>> =
             return data
                 ?: run {
                     println(key)
-                    val n = List(30) {
+                    val n = List(IndividualSize) {
                         VecData(List(key.d) {
                             createRandomFloatGrayCode(key.gl, Range)
                         })
